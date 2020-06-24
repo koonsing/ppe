@@ -1,0 +1,101 @@
+{
+    "videoMicroserviceHost": "http://point.sg.ibm.com:3001",
+    "sendSms": false,
+    "useTcp": false,
+    "paivUri": {
+        "PCB": {
+            "active": true,
+            "type": "detection",
+            "program": "standalone",
+            "display": "MWC_PCB",
+            "url": "http://9.178.216.58:9025/inference",
+            "url_classification": "",
+            "edit": false
+        },
+        "AIS_model": {
+            "active": true,
+            "type": "twosteps",
+            "program": "integrated",
+            "display": "PPE",
+            "url": "https://9.178.216.58/visual-insights/api/dlapis/8f32ecab-5a1c-4835-aa3e-88632e1c1f57",            
+            "program_classification": "standalone",
+            "url_classification": "http://9.178.216.58:9052/inference",
+            "edit": false
+        },
+        "AISPPE": {
+            "active": true,
+            "type": "detection",
+            "program": "standalone",
+            "display": "PPE Detection",
+            "url": "http://9.178.216.58:9051/inference",
+            "url_classification": "",
+            "edit": false
+        }
+    },
+    "goodObjects": {
+        "PCB": [
+            "bent_pin"
+        ],
+        "AIS_model": [
+            "with_hat",
+            "with_glasses",
+            "with_mask",
+            "with_earplug",
+            "with_armband",
+            "with_glove",
+            "hair_in",
+            "right_safety_shoes"                        
+        ],
+        "AISPPE": [
+            "with_earplug",
+            "with_armband",
+            "with_glasses",
+            "with_mask",
+            "with_glove",
+            "with_hat"
+        ]
+    },
+    "badObjects": {
+        "PCB": [
+            "bent_pin"
+        ],
+        "AIS_model": [
+            "wrong_hat_wear",
+            "no_glasses",
+            "no_mask",
+            "no_earplug",
+            "no_armband",
+            "no_glove",
+            "hair_out",
+            "wrong_safety_shoes"
+        ],
+        "AISPPE": [
+            "no_earplug",
+            "no_armband",
+            "no_glasses",
+            "no_mask",
+            "no_glove",
+            "wrong_hat_wear"
+        ]
+    },
+    "trackingObjects": {
+        "PCB": [
+            "bent_pin"
+        ],
+        "AIS_model": [
+            "upper_body",
+            "full_body"
+        ],
+        "AISPPE": [
+            "person"
+        ]
+    },
+    "twoStepsObjects": {
+        "PCB": [],
+        "AIS_model": [
+            "head",
+            "shoes"
+        ],        
+        "AISPPE": []
+    }
+}

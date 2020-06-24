@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PPE Inspection App</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="/scripts/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="/scripts/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+
+
+    
+
+    <link rel="stylesheet" 	href="/bower_components/ekko-lightbox/dist/ekko-lightbox.min.css">
+    <link rel="stylesheet" href="css/kurento.css">
+    
+    
+    <script src="/bower_components/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+    <script	src="/bower_components/adapter.js/adapter.js"></script>
+    
+    <script src="/bower_components/kurento-client/js/kurento-client.js"></script>
+    <script src="/bower_components/kurento-utils/js/kurento-utils.js"></script>
+    
+
+
+
+</head>
+
+<body class="desktop">
+    <!-- ****************  TOP NAVIGATION BAR  *************** -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <!-- Left Nav -->
+        <img src="/assets/img/logo.png" height="40" class="d-inline-block align-top padright" alt="IBM">
+        <a class="navbar-brand" style="color:white; font-size: 1.2rem;">
+            PPE Inspection App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
+            aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span></button>
+
+        <!-- Right Nav UL -->
+        <div class="collapse navbar-collapse" id="navbarToggler">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+            <div class="navbar-nav my-2 my-lg-0">
+               
+            </div>
+        </div>
+    </nav>
+
+    <!-- ****************  BODY  *************** -->
+    <div class="container-fluid padbtm2">
+        <div class="card-deck">
+
+            <!-- ****************  LIVE RESULT (COLUMN 1) *************** -->
+            <div class="card controlheight1">
+                
+                <div class="card-body" align="center"style="padding-top: 0;">
+
+                    <!-- <<< Control Panel >>> -->
+                    <form class="row" >
+           
+        
+                        <!-- Station ID / RTSP Host -->
+                        <div class="col-lg-6 col-md-12 padcustom" align="left">
+                            <label for="stationId">Station ID:
+                            </label>
+
+                            <input type="text" id="stationId" class="form-control form-control-sm"
+                                placeholder="Key in Station ID">
+                        </div>
+                        <div class="col-lg-6 col-md-12 padcustom" align="left" >
+                            <label for="rtspHost">RTSP Host:
+                            </label>
+
+                            <input type="text"  id="rtspHost" class="form-control form-control-sm"
+                                placeholder="Key in RTSP Host IP:PORT...">
+                        </div>
+
+
+
+                   
+                    </form>
+                    <hr>
+
+                    <!-- <<< Result Display Panel >>> -->
+
+                    
+                    <div class="row">
+
+
+                        <div class="col-lg-4 col-md-6 padcustom2" id="startdiv" style="display: block;">
+                            <button id="startbtn"  onclick="start()" type="button" class="btn btn-block imgbtn"
+                                style="background:linear-gradient(to bottom, #000099 0%, #009999 100%)">
+                                <i class="fas fa-play"></i> Start </button>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 padcustom2" id="startdiv" style="display: block;">
+                            <button id="stopbtn"   onclick="stop()" type="button" class="btn btn-block imgbtn"
+                                style="background:linear-gradient(to bottom, #000099 0%, #009999 100%)">
+                                <i class="fas fa-stop"></i> Stop </button>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 padcustom2" id="startdiv" style="display: block;">
+                            <button id="rtcstart"  hidden type="button" class="btn btn-block imgbtn"
+                                style="background:linear-gradient(to bottom, #000099 0%, #009999 100%)">
+                                <i class="fas fa-play"></i> rtcstart </button>
+                        </div>
+
+
+                        
+                        <div class="col-lg-4 col-md-6 padcustom2" id="startdiv" style="display: block;">
+                            <button id="rtcstop"  hidden type="button" class="btn btn-block imgbtn"
+                                style="background:linear-gradient(to bottom, #000099 0%, #009999 100%)">
+                                <i class="fas fa-play"></i> rtcStop </button>
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+                    <br>
+
+
+                    <div class="container">
+                        <div class="page-header">
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-auto">
+                                <h3></h3>
+                                <video id="videoOutput" autoplay width="480px" height="360px"
+                                    poster="./img/webrtc.png"></video>
+                                </br>
+                            </div>
+              
+              
+              
+              
+                            <div class="col-lg-5">
+                            <table id="mytable" border="1" class="table table-bordered">
+                                    
+                                <tr>
+                                    <td><h4>Helmet</h4></td><td><h4>Goggle</h4></td><td><h4>Vest</h4></td>
+                                </tr>
+                                <tr>
+                                    <td></td><td></td><td></td>
+                                </tr>
+
+                                </table>
+                            </div>
+              
+              
+                        </div>
+                    </div>
+                
+
+
+
+
+
+                </div>
+            </div>
+            <!-- end of card -->
+
+
+
+        </div>
+    </div>
+
+
+    <!-- ****************  FOOTER  *************** -->
+
+    <!-- JAVASCRIPT LOAD -->
+    <script src="/scripts/jquery/dist/jquery.min.js"></script>
+    <script src="/scripts/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+    
+
+    <!-- Client Javascript: Socket.io -->
+    <script src="/scripts/socket.io-client/dist/socket.io.js"></script>
+
+    <script src="/app/main.js"></script>
+    <script src="/app/index.js"></script>
+
+
+</body>
+
+</html>

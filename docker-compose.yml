@@ -1,0 +1,96 @@
+version: '3'
+services:
+  redis:
+    image: redis:5.0.6-alpine
+    hostname: redis
+    environment: 
+      - TZ=Singapore
+
+  uwsgi-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ibmcom/magna-video-microservice:latest
+    hostname: uwsgi-worker    
+    volumes:
+      - outputvid:/var/run/celery/videos
+      - outputvid:/var/run/celery/annotated
+      - app_logs:/var/log/magna/
+    command: /usr/bin/supervisord
+    depends_on:
+      - celery-worker
+      - redis
+    environment: 
+      - TZ=Singapore
+      - FLASK_ENV=development
+
+  celery-worker:
+    image: ibmcom/magna-video-microservice:latest
+    hostname: celery-worker
+    volumes:
+      - outputvid:/var/run/celery/videos
+      - outputvid:/var/run/celery/annotated
+      - app_logs:/var/log/magna/
+    command: celery -A celery_worker.celery worker -Ofair --loglevel=info --autoscale=4,2 --max-tasks-per-child 1 --pidfile=/tmp/celery.pid
+    entrypoint: /bin/bash docker-entrypoint.sh
+    depends_on: 
+      - redis
+    restart: on-failure
+    environment: 
+      - TZ=Singapore
+      - FLASK_ENV=development
+
+  log-rotator:
+    image: blacklabelops/logrotate
+    volumes:
+      - app_logs:/var/log/magna
+    environment:
+      - LOGS_DIRECTORIES=/var/log/magna
+      - LOGROTATE_INTERVAL=daily
+      - LOGROTATE_SIZE=10M
+      - LOGROTATE_COMPRESSION=compress
+      - LOGROTATE_COPIES=30
+      - TZ=Singapore    
+  ppe-app:
+    image: ibmcom/ppe-app:latest
+    hostname: ppe-app
+    working_dir: /usr/src/apps    
+    user: root:root
+    privileged: true
+    volumes:      
+      - app_alerts:/usr/src/apps/server/alerts
+      - app_config:/usr/src/apps/server/config
+    command: node server/app.js
+    restart: on-failure
+    ports:
+      - "5008:5008"          
+    environment: 
+      - TZ=Singapore
+volumes:
+  outputvid:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/nugraha/apps/ibm-th-poc-ppe-alerts/video/
+  
+  app_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/nugraha/apps/ibm-th-poc-ppe-alerts/logs/
+  
+  app_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/nugraha/apps/ibm-th-poc-ppe-alerts/config/
+  
+  app_alerts:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/nugraha/apps/ibm-th-poc-ppe-alerts/

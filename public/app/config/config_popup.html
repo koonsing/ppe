@@ -1,0 +1,396 @@
+<md-dialog class="config-dialog">
+    <form ng-cloak>
+        <!-- ----------------TOP NAV BAR---------------------- -->
+        <md-toolbar class="config-navbar">
+            <div class="md-toolbar-tools">
+                <h2 style="font-weight: bold;">Add New Model</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="ctrl.cancel()">
+                    <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <!-- ----------------END TOP NAV BAR---------------------- -->
+
+        <!-- ----------------DIALOG CONTENT---------------------- -->
+        <md-dialog-content>
+            <div layout="row" layout-align="space-between center" class="row config-dialog-content">
+                <div class="col-md-6">
+                    <h5 style="font-weight: bold;">Select Model Source</h5>
+                </div>
+                <div class="col-md-6">
+                    <md-select ng-model="ctrl.program" placeholder="Select Program" class="md-underline">
+                        <md-option value="integrated" ng-click="ctrl.selectIntegrated()">Integrated (Visual Insights
+                            GUI)
+                        </md-option>
+                        <md-option value="standalone" ng-click="ctrl.selectStandalone()">Standalone (Inference
+                            Program)</md-option>
+                    </md-select>
+                </div>
+            </div>
+
+            <!-- ----------------INTEGRATED (VISUAL INSIGHTS GUI) MODE---------------------- -->
+            <div class="col-md-12" ng-show="ctrl.integratedError" ng-class="ctrl.paivErrorClass">
+                <h6>{{ctrl.integratedErrorMsg}}</h6>
+                <i class="fa fa-exclamation fa-3x fa-fw" style="font-size:24px"></i>
+                <br><br>
+            </div>
+
+            <div layout="row" layout-align="space-between center" class="row config-dialog-content"
+                ng-show='ctrl.integrated'>
+                <div class="col-md-12" ng-show="ctrl.integratedLogin">
+                    <h5 style="font-weight: bold;">Please Login to Visual Insights</h5>
+                    <br>
+                </div>
+                <div class="col-md-12" ng-show="ctrl.integratedLogin">
+                    <form name="loginForm" role="form">
+                        <md-content layout="column" class="md-padding">
+                            <md-input-container class="md-icon-float md-block">
+                                <label>Visual Insights URL</label>
+                                <input ng-required="true" type="text" ng-model="ctrl.paivUrl" name="paivUrl" />
+                                <div ng-messages="loginForm.paivUrl.$error" md-auto-hide="false" role="alert">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="md-icon-float md-block">
+                                <label>Visual Insights Username</label>
+                                <input ng-required="true" type="text" ng-model="ctrl.paivUser" name="paivUser" />
+                                <div ng-messages="loginForm.paivUser.$error" md-auto-hide="false" role="alert">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="md-icon-float md-block">
+                                <label>Visual Insights Password</label>
+                                <input ng-required="true" type="password" ng-model="ctrl.paivPwd" name="paivPwd" />
+                                <div ng-messages="loginForm.paivPwd.$error">
+                                    <div ng-message="required">This is required.</div>
+                                </div>
+                            </md-input-container>
+                            <div layout="row" layout-align="center center">
+                                <md-button type="submit" ng-disabled="loginForm.$invalid" class="md-raised md-primary"
+                                    ng-click="ctrl.paivLogin()">Login
+                                </md-button>
+                                <div flex="flex"></div>
+                            </div>
+                            <br>
+                        </md-content>
+                    </form>
+                </div>
+                <div class="col-md-12 paiv-model" ng-show="ctrl.integratedModel">
+                    <div layout="row" layout-align="space-between top" class="row">
+                        <div class="col-md-4">
+                            <h6 style="font-weight: bold;">Select Visual Insights Model:</h6>
+                            <md-select ng-model="ctrl.model" placeholder="Select Model" class="md-underline">
+                                <md-option ng-repeat="model in ctrl.paivModels" value="{{model.name}}"
+                                    ng-click="ctrl.selectModel($index)">{{model.name}}
+                                </md-option>
+                            </md-select>
+                            <md-checkbox ng-model="ctrl.twoSteps" aria-label="2-Steps">
+                                2-Steps
+                            </md-checkbox>
+
+                        </div>
+                        <div class="col-md-8" ng-show="ctrl.integratedConfig">
+                            <form name="modelForm" role="form">
+                                <md-dialog-content layout="column" class="md-padding">
+
+                                    <h6 style="font-weight: bold;">Display Name</h6>
+                                    <!-- <md-divider></md-divider> -->
+                                    <!-- <md-divider></md-divider> -->
+                                    <md-input-container class="md-icon-float md-block">
+                                        <!-- <label></label> -->
+                                        <input ng-required="true" type="text" ng-model="ctrl.modelDetails.display"
+                                            name="modelName" placeholder="Name to be displayed in Mobile selection" />
+                                        <div ng-messages="modelForm.modelName.$error" md-auto-hide="false" role="alert">
+                                            <div ng-message="required">This is required.</div>
+                                        </div>
+                                    </md-input-container>
+
+                                    <h6 style="font-weight: bold;">Object Labels</h6>
+                                    <!-- <md-divider></md-divider>
+                                    <md-divider></md-divider> -->
+                                    <!-- <label>Please Indicate Good/Bad Labels</label> -->
+
+                                    <table class="table  table-sm">
+                                        <thead>
+                                            <tr class="animation" align="center">
+                                                <th scope="col">
+                                                    Labels
+                                                </th>
+                                                <th scope="col" ng-show="ctrl.twoSteps">
+                                                    Good/Bad/Tracking/2-Steps
+                                                </th>
+                                                <th scope="col" ng-hide="ctrl.twoSteps">
+                                                    Good/Bad/Tracking
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="animation" ng-repeat="mod in ctrl.modelDetails.categories">
+                                                <td>{{ mod.category_name }}</td>
+                                                <td>
+                                                    <md-radio-group ng-required="true"
+                                                        ng-model="ctrl.modelDetails.categories[$index].logic_category"
+                                                        name="logicCat">
+                                                        <div class="row">
+                                                            <div class="col-lg-3 col-md-6">
+                                                                <md-radio-button value="good" class="md-primary">Good
+                                                                </md-radio-button>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-6">
+                                                                <md-radio-button value="bad" class="md-primary"> Bad
+                                                                </md-radio-button>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-6">
+                                                                <md-radio-button value="tracking" class="md-primary">
+                                                                    Tracking </md-radio-button>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-6" ng-show="ctrl.twoSteps">
+                                                                <md-radio-button value="twoSteps" class="md-primary">
+                                                                    2-Steps </md-radio-button>
+                                                            </div>
+                                                        </div>
+                                                        <div ng-messages="modelForm.logicCat.$error"
+                                                            md-auto-hide="false" role="alert">
+                                                            <div ng-message="required">This is required.</div>
+                                                        </div>
+                                                    </md-radio-group>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div ng-show="ctrl.twoSteps">
+                                        <h6 style="font-weight: bold;">Classification URL</h6>
+                                        <!-- <md-divider></md-divider>
+                                        <md-divider></md-divider> -->
+                                        <md-input-container class="md-icon-float md-block">
+                                            <input ng-required="true" type="text" ng-model="ctrl.classificationUrl"
+                                                name="classificationUrl"
+                                                placeholder="Classification URL API End Point (Standalone Only)" />
+                                            <div ng-messages="modelForm.classificationUrl.$error" md-auto-hide="false"
+                                                role="alert">
+                                                <div ng-message="required">This is required.</div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <table class="table table-bordered table-striped
+                                                        table-hover table-md">
+                                            <tbody class="config-table-body">
+                                                <tr class="animation">
+                                                    <td class="config-input-key">GOOD Labels </td>
+                                                    <td class="config-input-value">
+                                                        <md-chips ng-model="ctrl.integratedTwostepsGood" readonly="false"
+                                                            md-removable='true'
+                                                            placeholder="Input new label & Enter...">
+                                                        </md-chips>
+                                                    </td>
+                                                </tr>
+                                                <tr class="animation">
+                                                    <td class="config-input-key">BAD Labels </td>
+                                                    <td class="config-input-value">
+                                                        <md-chips ng-model="ctrl.integratedTwostepsBad" readonly="false"
+                                                            md-removable='true'
+                                                            placeholder="Input new label & Enter...">
+                                                        </md-chips>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div layout="row" layout-align="center center">
+                                            <md-button type="submit" ng-disabled="modelForm.$invalid"
+                                                class="md-raised md-primary" ng-click="ctrl.updateModel()">Add Model
+                                            </md-button>
+                                            <div flex="flex"></div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </md-dialog-content>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" ng-show="ctrl.integratedWait" ng-class="ctrl.paivWaitClass" layout="row"
+                    layout-sm="column" layout-align="space-around">
+                    <h6>{{ctrl.integratedWaitMsg}}</h6>
+                    <i class="fa fa-cog fa-spin fa-3x fa-fw" style="font-size:24px"></i>
+                    <br><br>
+                </div>
+
+            </div>
+            <!-- ----------------END INTEGRATED (VISUAL INSIGHTS GUI) MODE---------------------- -->
+
+            <!-- ----------------STANDALONE (INFERENCE PROGRAM) MODE---------------------- -->
+            <div layout="row" layout-align="space-between center" class="row config-dialog-content"
+                ng-show='ctrl.standalone'>
+                <div class="col-md-12">
+                    <form name="standaloneForm" role="form">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover
+                                        table-md table-condensed">
+                                <thead class="config-table-header">
+                                    <!-- Table Header Title -->
+                                    <tr class="animation" align="center">
+                                        <th style="width:25%">
+                                            Model
+                                        </th>
+                                        <th style="width:75%">
+                                            Config
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="config-table-body">
+                                    <!-- Table Body -->
+                                    <tr class="animation">
+                                        <td class="config-table-key">
+                                            <h6 style="font-weight: bold;">Model ID</h6>
+                                            <br>
+                                            <md-input-container class="md-icon-float md-block"
+                                                style="font-weight: normal;">
+                                                <!-- <label></label> -->
+                                                <input ng-required="true" type="text" ng-model="ctrl.modelDetails.name"
+                                                    name="modelName" placeholder="Model ID (No Space)" />
+                                                <div ng-messages="standaloneForm.modelName.$error" md-auto-hide="false"
+                                                    role="alert">
+                                                    <div ng-message="required">This is required.</div>
+                                                </div>
+                                            </md-input-container>
+                                           
+                                        </td>
+                                        <td>
+                                            <table class="table table-bordered table-striped
+                                                        table-hover table-md">
+                                                <tbody class="config-table-body">
+                                                    <tr class="animation">
+                                                        <td class="config-input-key">Display
+                                                            Name </td>
+                                                        <td class="config-input-value">
+                                                            <md-input-container class="md-icon-float
+                                                                                md-block" style="margin:0"
+                                                                md-theme="docs-dark">
+                                                                <input ng-required="true" type="text"
+                                                                    ng-model="ctrl.modelDetails.display"
+                                                                    name="modelDisplay"
+                                                                    placeholder="Name to be displayed in Mobile selection" />
+                                                                <div ng-messages="standaloneForm.modelDisplay.$error"
+                                                                    md-auto-hide="false" role="alert">
+                                                                    <div ng-message="required">This is required.</div>
+                                                                </div>
+                                                            </md-input-container>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="animation">
+                                                        <td class="config-input-key">Type</td>
+                                                        <td class="config-input-value">
+                                                            <md-radio-group ng-model="ctrl.standaloneType" layout="row">
+                                                                <md-radio-button value="detection"
+                                                                    ng-click="ctrl.selectNonTwoSteps()">Detection
+                                                                </md-radio-button>
+                                                                <md-radio-button value="classification"
+                                                                    ng-click="ctrl.selectNonTwoSteps()">Classification
+                                                                </md-radio-button>
+                                                                <md-radio-button value="twoSteps"
+                                                                    ng-click="ctrl.selectTwoSteps()">2-Steps
+                                                                </md-radio-button>
+
+                                                            </md-radio-group>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="animation">
+                                                        <td class="config-input-key">Inference API </td>
+                                                        <td class="config-input-value">
+                                                            <md-input-container class="md-icon-float
+                                                                        md-block" style="margin:0"
+                                                                md-theme="docs-dark">
+                                                                <input ng-required="true" type="text"
+                                                                    ng-model="ctrl.standaloneUrl" name="modelUrl"
+                                                                    placeholder="Inference URL API End Point" />
+                                                                <div ng-messages="standaloneForm.modelUrl.$error">
+                                                                    <div ng-message="required">This
+                                                                        is required.</div>
+                                                                </div>
+                                                            </md-input-container>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="animation" ng-show="ctrl.twoSteps">
+                                                        <td class="config-input-key">Classification API </td>
+                                                        <td class="config-input-value">
+                                                            <md-input-container class="md-icon-float
+                                                                        md-block" style="margin:0"
+                                                                md-theme="docs-dark">
+                                                                <input ng-required="true" type="text"
+                                                                    ng-model="ctrl.classificationUrl"
+                                                                    name="classificationUrl"
+                                                                    placeholder="Classification URL API End Point (Standalone Only)" />
+                                                                <div
+                                                                    ng-messages="standaloneForm.classificationUrl.$error">
+                                                                    <div ng-message="required">This
+                                                                        is required.</div>
+                                                                </div>
+                                                            </md-input-container>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="animation">
+                                                        <td class="config-input-key">GOOD Labels </td>
+                                                        <td class="config-input-value">
+                                                            <md-chips ng-model="ctrl.standaloneGood" readonly="false"
+                                                                md-removable='true'
+                                                                placeholder="Input new label & Enter...">
+                                                            </md-chips>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="animation">
+                                                        <td class="config-input-key">BAD Labels </td>
+                                                        <td class="config-input-value">
+                                                            <md-chips ng-model="ctrl.standaloneBad" readonly="false"
+                                                                md-removable='true'
+                                                                placeholder="Input new label & Enter...">
+                                                            </md-chips>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="animation">
+                                                        <td class="config-input-key">TRACKING Labels </td>
+                                                        <td class="config-input-value">
+                                                            <md-chips ng-model="ctrl.standaloneTracking"
+                                                                readonly="false" md-removable='true'
+                                                                placeholder="Input new label & Enter...">
+                                                            </md-chips>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="animation">
+                                                        <td class="config-input-key">2-STEPS Labels </td>
+                                                        <td class="config-input-value">
+                                                            <md-chips ng-model="ctrl.standaloneTwosteps"
+                                                                readonly="false" md-removable='true'
+                                                                placeholder="Input new label & Enter...">
+                                                            </md-chips>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+
+                                            </table>
+                                            <div layout="row" layout-align="center center">
+                                                <md-button type="submit" ng-disabled="standaloneForm.$invalid"
+                                                    class="md-raised md-primary" ng-click="ctrl.updateModel()">Add Model
+                                                </md-button>
+                                                <div flex="flex"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+            <!-- ----------------END STANDALONE (INFERENCE PROGRAM) MODE---------------------- -->
+        </md-dialog-content>
+        <!-- ----------------END DIALOG CONTENT---------------------- -->
+    </form>
+</md-dialog>

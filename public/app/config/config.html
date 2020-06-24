@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PPE Inspection App</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="/scripts/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" href="/scripts/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/scripts/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body ng-cloak ng-app="PaivConfig" ng-controller="ConfigCtrl as ctrl">
+    <!-- ****************  TOP NAVIGATION BAR  *************** -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <!-- Left Nav -->
+        <img src="/assets/img/logo.png" height="40" class="d-inline-block align-top padright" alt="IBM">
+        <a class="navbar-brand" style="color:white; font-size: 1.2rem;">
+            PPE Inspection App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
+            aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span></button>
+        <!-- Right Nav UL -->
+        <div class="collapse navbar-collapse" id="navbarToggler">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+            <div class="navbar-nav my-2 my-lg-0">
+                <a href="/" class="nav-item nav-link text-light padright">Home</a>
+                <a href="/app/config/config.html" class="nav-item nav-link text-light padright">Config</a>                
+            </div>
+        </div>
+    </nav>
+
+    <!-- ****************  BODY  *************** -->
+    
+    <!-- <div class="col-md-12 config-card"> -->
+    <div class="card config-card">
+        <div class="row">
+
+            <div class="col-md-5 config-radio">
+                <md-radio-group ng-model="ctrl.configFilter" layout="row" style="margin-top:1%; margin-left:1%">
+                    <md-radio-button value="" class="md-primary">All</md-radio-button>
+                    <md-radio-button value="integrated"> Integrated (Visual Insights GUI) </md-radio-button>
+                    <md-radio-button value="standalone">Standalone (Inference Program)</md-radio-button>
+                </md-radio-group>
+            </div>
+            <div class="col-md-5">
+                <h2 class="config-title">Model Settings</h2>
+            </div>
+            <div class="col-md-2" style="text-align:right">
+                <md-button class="md-fab md-mini md-primary pull-right" ng-click="ctrl.addModel()">
+                    <md-tooltip md-direction="top">Add New Model</md-tooltip>
+                    <i class="fa fa-plus fa-lg" aria-hidden="true"></i>
+                </md-button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover
+                    table-md table-condensed">
+                <thead class="config-table-header">
+                    <!-- Table Header Title -->
+                    <tr class="animation" align="center">
+                        <th scope="col">
+                            Model
+                        </th>
+                        <th scope="col">
+                            Config
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody class="config-table-body">
+                    <!-- Table Body -->
+                    <tr class="animation" ng-repeat="(key,value) in
+                            ctrl.config.paivUri" ng-show="value.program == ctrl.configFilter ||
+                            ctrl.configFilter==''">
+                        <td class="config-table-key">
+                            <div>
+                                <h5 style="font-weight: bold;">{{ key }}</h5>
+                            </div>
+                            <div ng-hide="ctrl.config.paivUri[key].edit">
+                                <md-button class="md-raised md-primary
+                                        md-mini" ng-click="ctrl.configEdit(key)">Edit
+                                </md-button>
+                            </div>
+                            <div ng-show="ctrl.config.paivUri[key].edit">
+                                <md-button class="md-raised md-primary
+                                        md-mini" ng-click="ctrl.configSave(key)">Save
+                                </md-button>
+                                <md-button class="md-raised md-primary
+                                        md-mini md-hue-1" ng-click="ctrl.configCancel(key)">Cancel
+                                </md-button>
+                                <md-button class="md-raised md-primary
+                                        md-mini md-warn" ng-click="ctrl.configConfirmDelete($event,key)">Delete
+                                </md-button>
+                            </div>
+
+
+                        </td>
+                        <td>
+                            <table class="table table-bordered table-striped
+                                    table-hover table-md">
+                                <tbody class="config-table-body">
+                                    <tr class="animation">
+                                        <td class="config-table-key">Display Name </td>
+                                        <td class="config-table-value" ng-hide="ctrl.config.paivUri[key].edit" style="font-weight: bold;">{{ value.display }}</td>
+                                        <td class="config-table-value" ng-show="ctrl.config.paivUri[key].edit">
+                                            <md-input-container class="md-icon-float
+                                                            md-block" style="margin:0" md-theme="docs-dark">
+                                                <input ng-required="true" type="text" ng-model="ctrl.config.paivUri[key].display" name="paivDisplay" />                                                
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+                                    <tr class="animation">
+                                        <td class="config-table-key">Enabled
+                                        </td>
+                                        <td class="config-table-value" ng-hide="ctrl.config.paivUri[key].edit">
+                                            {{ value.active }}</td>
+                                        <td class="config-table-value" ng-show="ctrl.config.paivUri[key].edit" layout="row">
+                                            <h6>Disabled &nbsp &nbsp</h6>
+                                            <md-switch class="md-primary" ng-model="ctrl.config.paivUri[key].active" aria-label="Toggle
+                                                    Enabled/Disabled" style="margin:0">
+                                            </md-switch>
+                                            <h6>&nbsp &nbsp Enabled</h6>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="animation">
+                                        <td class="config-table-key">Type</td>
+                                        <td class="config-table-value" ng-hide="ctrl.config.paivUri[key].edit && ctrl.config.paivUri[key].program=='standalone'">
+                                            {{value.type }}</td>
+                                        <td class="config-table-value" ng-show="ctrl.config.paivUri[key].edit && ctrl.config.paivUri[key].program=='standalone'">
+                                            <md-radio-group ng-model="ctrl.config.paivUri[key].type" layout="row">
+                                                <md-radio-button value="detection">Detection</md-radio-button>
+                                                <md-radio-button value="classification">Classification</md-radio-button>
+                                                <md-radio-button value="twosteps">2-Steps</md-radio-button>
+                                            </md-radio-group>
+                                        </td>
+                                    </tr>
+                                    <tr class="animation">
+                                        <td class="config-table-key">Inference Program </td>
+                                        <td class="config-table-value">{{value.program }}</td>
+                                    </tr>
+                                    <tr class="animation">
+                                        <td class="config-table-key">Inference API </td>
+                                        <td class="config-table-value" ng-hide="ctrl.config.paivUri[key].edit && (ctrl.config.paivUri[key].program=='standalone' )">
+                                            {{value.url }}</td>
+                                        <td class="config-table-value" ng-show="ctrl.config.paivUri[key].edit && (ctrl.config.paivUri[key].program=='standalone')">
+                                            <md-input-container class="md-icon-float
+                                                    md-block" style="margin:0" md-theme="docs-dark">
+                                                <input ng-required="true" type="text" ng-model="ctrl.config.paivUri[key].url" name="paivUrl" />
+                                                <!-- <div ng-messages="loginForm.paivUrl.$error">
+                                                    <div ng-message="required">This
+                                                        is required.</div>
+                                                </div> -->
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+                                    <tr class="animation" ng-show = "ctrl.config.paivUri[key].program_classification=='standalone'" >
+                                        <td class="config-table-key">Classification API </td>
+                                        <td class="config-table-value" ng-hide="ctrl.config.paivUri[key].edit && ctrl.config.paivUri[key].program_classification=='standalone'">
+                                            {{value.url_classification }}</td>
+                                        <td class="config-table-value" ng-show="ctrl.config.paivUri[key].edit && ctrl.config.paivUri[key].program_classification=='standalone'">
+                                            <md-input-container class="md-icon-float
+                                                    md-block" style="margin:0" md-theme="docs-dark">
+                                                <input ng-required="true" type="text" ng-model="ctrl.config.paivUri[key].url_classification" name="classificationUrl" />                                               
+                                            </md-input-container>
+                                        </td>
+                                    </tr>
+                                    <tr class="animation">
+                                        <td class="config-table-key">GOOD Labels </td>
+                                        <td class="config-table-value config-table-body">
+
+                                            <md-chips ng-model="ctrl.config.goodObjects[key]" readonly="!ctrl.config.paivUri[key].edit" md-removable='ctrl.config.paivUri[key].edit' placeholder="Enter a new label...">
+                                            </md-chips>
+                                        </td>
+                                    </tr>
+                                    <tr class="animation">
+                                        <td class="config-table-key">BAD Labels </td>
+
+                                        <td class="config-table-value config-table-body">
+                                            <md-chips ng-model="ctrl.config.badObjects[key]" readonly="!ctrl.config.paivUri[key].edit" md-removable='ctrl.config.paivUri[key].edit' placeholder="Enter a new label...">
+                                            </md-chips>
+                                        </td>
+                                    </tr>
+                                    <tr class="animation">
+                                        <td class="config-table-key">Tracking Labels </td>
+
+                                        <td class="config-table-value config-table-body">
+                                            <md-chips ng-model="ctrl.config.trackingObjects[key]" readonly="!ctrl.config.paivUri[key].edit" md-removable='ctrl.config.paivUri[key].edit' placeholder="Enter a new label...">
+                                            </md-chips>
+                                        </td>
+                                    </tr>
+                                    <tr class="animation" ng-show="ctrl.config.paivUri[key].type=='twoSteps'">
+                                        <td class="config-table-key">2-Steps Labels </td>
+
+                                        <td class="config-table-value config-table-body">
+                                            <md-chips ng-model="ctrl.config.twoStepsObjects[key]" readonly="!ctrl.config.paivUri[key].edit" md-removable='ctrl.config.paivUri[key].edit' placeholder="Enter a new label...">
+                                            </md-chips>
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ****************  JAVASCRIPT  *************** -->
+    <!-- Boostrap -->
+    <script src="/scripts/jquery/dist/jquery.min.js"></script>
+    <script src="/scripts/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Angular -->
+    <script src="/scripts/angular/angular.min.js"></script>
+    <script src="/scripts/angular-animate/angular-animate.min.js"></script>
+    <script src="/scripts/angular-messages/angular-messages.min.js"></script>
+    <script src="/scripts/angular-aria/angular-aria.js"></script>
+    <script src="/scripts/angular-material/angular-material.min.js"></script>
+    <!-- APP -->
+    <script src="/app/config/config-app.js"></script>
+    <script src="/app/config/config-controller.js"></script>
+    <script src="/app/services/config-services.js"></script>
+
+</body>
+
+</html>
