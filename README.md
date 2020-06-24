@@ -1,13 +1,13 @@
 # ppe
-git clone
-npm install
-change directory to public folder , do bower install
-node server/app.js 
+git clone <br> 
+npm install <br> 
+change directory to public folder , do bower install <br> 
+node server/app.js  <br> 
 
 API end point for spinning container
 http://localhost:5008/api/inspection/def 
 
-
+<br> 
 API end point for push data and trigger webrtc
 http://localhost:5008/api/inspection/abc
 
