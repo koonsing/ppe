@@ -104,16 +104,23 @@ module.exports = function (io) {
     var auxContainer;
     docker1.createContainer({
     name : 'container1',
-    Image: 'jenkins_agent',
+    Image: 'nginx',
     AttachStdin: false,
     AttachStdout: true,
     AttachStderr: true,
     Tty: true,
-    Cmd: ['/bin/bash', '-c', 'docker run -it --name container2 nginx ','sleep 20'],
-    
+    Cmd: ['/bin/bash', '-c', 'tail','-f','/dev/null'],
+    ExposedPorts: {
+        '80/tcp': {}
+      },
     HostConfig: {
         AutoRemove: true,
-        Binds: ["/var/run/docker.sock:/var/run/docker.sock"]   
+        Binds: ["/var/run/docker.sock:/var/run/docker.sock"],
+        PortBindings: {
+            '80/tcp': [{
+              HostPort: '8080',
+            }],
+          },   
         
     },
     OpenStdin: false,
@@ -210,14 +217,16 @@ module.exports = function (io) {
                  console.log("checking container 1");
                  console.log('Result container 1: ', result);
                  
-                 return dockertop2(result);
-     
+               
+                 var returnVal;
+                 returnVal = {
+                     'container1': result,
+                   
+                 };
+                 console.log(returnVal);
+                 resolve(returnVal);
              })
-             .then(function(data2) {
-             resolve(data2)
-             
-             })
-             .catch(function (error) {
+            .catch(function (error) {
                      console.log(error.message);
                      reject(error);
              });
