@@ -3,7 +3,9 @@ services:
   ppe-app:
     image: dum
     hostname: ppe-app
-    working_dir: /usr/src/apps    
+    working_dir: /usr/src/app    
+    build:
+      context: .
     user: root:root
     privileged: true
     volumes:      

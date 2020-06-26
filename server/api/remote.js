@@ -156,7 +156,7 @@ module.exports = function (io) {
             return new Promise(function(resolve, reject) {
                  
                 console.log("helo dockertop1");
-                exec("sh docker  top container1  | wc -l", (error, stdout, stderr) => {
+                exec("docker  top container1  | wc -l", (error, stdout, stderr) => {
                 if (error) {
                     console.log(`error: ${error.message}`);
                     reject(error.message);
@@ -180,7 +180,7 @@ module.exports = function (io) {
         return new Promise(function(resolve, reject) {
             console.log("helo dockertop2");
  
-        exec("sh docker  top container2 | wc -l", (error, stdout, stderr) => {
+        exec("docker  top container2 | wc -l", (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
                 reject(error.message);

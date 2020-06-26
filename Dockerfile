@@ -54,24 +54,21 @@ RUN apt install -y python3-pip
 
 RUN pip3 install docker-compose
 
-WORKDIR /usr/src/downloads
-
-RUN git clone https://github.com/koonsing/ppe.git
-
 RUN mkdir /usr/src/apps
 
-COPY . /usr/src/apps
+RUN git clone https://github.com/koonsing/ppe.git /usr/src/app
 
-WORKDIR /usr/src/apps
+WORKDIR /usr/src/app
 
-RUN npm install
+RUN npm install 
 
-WORKDIR /usr/src/apps/public
+WORKDIR /usr/src/app/public
 
 RUN npm install -g bower
 
 RUN  bower install --allow-root
 
-WORKDIR /usr/src/apps
+WORKDIR /usr/src/app
 
 CMD ["node","server/app.js"]
+
