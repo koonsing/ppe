@@ -367,7 +367,7 @@ function initSocket() {
     
     socket.on('resultsocket', function (client) {
         
-        console.log("SOCKET ID inside main.js: " + client[1].confidence);
+        console.log("SOCKET ID inside main.js result: " + client[1].confidence);
         console.log("Array Length: " + client.length);
         console.log("rtsp: " + client[3].rtsp);
         
