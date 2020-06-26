@@ -60,6 +60,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //* >>> API END POINTS AND CALLBACKS >>>
 //======================================
 
+app.post("/api/inspection/result/", RemoteCtrl.postresult);
 app.post("/api/inspection/abc/", RemoteCtrl.postvalidate);
 app.get("/api/inspection/def/", RemoteCtrl.dockercall);
 app.post(API_INSPECTION_URI + "/clientstationrtspinfo/", InspectionCtrl.initStationRtsp);

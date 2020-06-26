@@ -365,6 +365,49 @@ function initSocket() {
      
     })  
     
+    socket.on('resultsocket', function (client) {
+        
+        console.log("SOCKET ID inside main.js: " + client[1].confidence);
+        console.log("Array Length: " + client.length);
+        console.log("rtsp: " + client[5].rtsp);
+        
+
+        document.getElementById("rtspHost").value= client[5].rtsp;
+     
+        if (flag == 'false')
+        {
+            if (client[6].flag == 'true' )
+            {
+                flag = client[6].flag ;
+                document.getElementById("rtcstart").click();
+        
+            }
+        
+        }   
+
+        
+        if (client[6].flag == 'false' )
+        {
+            flag = 'false'; 
+            document.getElementById("rtcstop").click();
+    
+        }
+        var x;
+        //document.getElementById("mytable").rows[0].cells[0].innerHTML
+        for(i=0;i<client.length-2;i++)
+        {
+             //document.getElementById("mytable").rows[1].cells[0].innerHTML=((client[i].confidence)*100).toFixed(2)+"%";
+             x=document.getElementById('mytable').rows[parseInt(1,10)].cells;
+            //x[Math.floor(i)].innerHTML="<h4>"+((client[i].confidence)*100).toFixed(2)+"%</h4>";
+            x[Math.floor(i)].innerHTML="<h4>"+((client[i].confidence)).toFixed(2)+"%</h4>";
+            console.log("inside :" +i)
+        }
+
+        
+        
+     
+    })  
+
 
 }
 

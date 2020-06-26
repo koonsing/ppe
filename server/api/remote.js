@@ -69,6 +69,7 @@ module.exports = function (io) {
         pushImage: pushImage,
         getAllClients: getAllClients,
         postvalidate: postvalidate,
+        postresult: postresult,
         dockercall: dockercall
     }
 
@@ -287,6 +288,60 @@ module.exports = function (io) {
             
         
     }
+
+    
+    function postresult(req, res){
+        
+        var rtsp = req.body.rtsp;
+        var socketId = req.body.socketId;
+        
+
+    var clientParams1 = [];
+    for (i = 0; i <req.body.objects.length; i++) {
+        product = {
+        
+            "confidence":  req.body.objects[i].confidence,
+            "label": req.body.objects[i].label,
+            "status": req.body.objects[i].status
+
+
+        }
+        clientParams1.push(product);
+    }
+
+        product = {
+        "rtsp": req.body.rtsp,
+
+        
+        }
+
+
+        clientParams1.push(product);
+
+
+        product = {
+            "flag": req.body.flag,
+        
+        }
+
+
+        clientParams1.push(product);
+
+
+       console.log(clientParams1)
+
+
+
+        res.status(200);
+        res.json(clientParams1);
+        console.log("Sending data to browser . . .  , for SocketID :" + socketId );
+        io.to(socketId).emit('resultsocket',clientParams1);
+        
+        
+    
+}
+
+
 
     function getClientSocket(clientId) {
         return clients[clientId].socketId;
