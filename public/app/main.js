@@ -369,16 +369,16 @@ function initSocket() {
         
         console.log("SOCKET ID inside main.js: " + client[1].confidence);
         console.log("Array Length: " + client.length);
-        console.log("rtsp: " + client[5].rtsp);
+        console.log("rtsp: " + client[4].rtsp);
         
 
-        document.getElementById("rtspHost").value= client[5].rtsp;
+        document.getElementById("rtspHost").value= client[4].rtsp;
      
         if (flag == 'false')
         {
-            if (client[6].flag == 'true' )
+            if (client[5].flag == 'true' )
             {
-                flag = client[6].flag ;
+                flag = client[5].flag ;
                 document.getElementById("rtcstart").click();
         
             }
@@ -386,7 +386,7 @@ function initSocket() {
         }   
 
         
-        if (client[6].flag == 'false' )
+        if (client[5].flag == 'false' )
         {
             flag = 'false'; 
             document.getElementById("rtcstop").click();
