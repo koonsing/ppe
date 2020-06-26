@@ -369,14 +369,14 @@ function initSocket() {
         
         console.log("SOCKET ID inside main.js: " + client[1].confidence);
         console.log("Array Length: " + client.length);
-        console.log("rtsp: " + client[4].rtsp);
+        console.log("rtsp: " + client[3].rtsp);
         
 
-        document.getElementById("rtspHost").value= client[4].rtsp;
+        document.getElementById("rtspHost").value= client[3].rtsp;
      
         if (flag == 'false')
         {
-            if (client[5].flag == 'true' )
+            if (client[4].flag == 'true' )
             {
                 flag = client[5].flag ;
                 document.getElementById("rtcstart").click();
