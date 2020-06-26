@@ -378,7 +378,7 @@ function initSocket() {
         {
             if (client[4].flag == 'true' )
             {
-                flag = client[5].flag ;
+                flag = client[4].flag ;
                 document.getElementById("rtcstart").click();
         
             }
@@ -386,7 +386,7 @@ function initSocket() {
         }   
 
         
-        if (client[5].flag == 'false' )
+        if (client[4].flag == 'false' )
         {
             flag = 'false'; 
             document.getElementById("rtcstop").click();
@@ -394,12 +394,62 @@ function initSocket() {
         }
         var x;
         //document.getElementById("mytable").rows[0].cells[0].innerHTML
+        //red : not_detected
+        //green : detected
+        //blank : detecting / reset
+        
         for(i=0;i<client.length-2;i++)
         {
              //document.getElementById("mytable").rows[1].cells[0].innerHTML=((client[i].confidence)*100).toFixed(2)+"%";
              x=document.getElementById('mytable').rows[parseInt(1,10)].cells;
             //x[Math.floor(i)].innerHTML="<h4>"+((client[i].confidence)*100).toFixed(2)+"%</h4>";
             x[Math.floor(i)].innerHTML="<h4>"+((client[i].confidence)).toFixed(2)+"%</h4>";
+            if (client[i].label=="helmet")
+            {   
+                if (client[i].status=="detecting")
+                { 
+                      document.getElementById('col1').style.backgroundColor="";
+                }
+                else if(client[i].status=="detected")
+                {
+                    document.getElementById('col1').style.backgroundColor="green";
+                }
+                else if(client[i].status=="not_detected")
+                {
+                    document.getElementById('col1').style.backgroundColor="red";
+                }
+            }
+            else if (client[i].label=="gloves")
+            {   
+                if (client[i].status=="detecting")
+                { 
+                      document.getElementById('col2').style.backgroundColor="";
+                }
+                else if(client[i].status=="detected")
+                {
+                    document.getElementById('col2').style.backgroundColor="green";
+                }
+                else if(client[i].status=="not_detected")
+                {
+                    document.getElementById('col2').style.backgroundColor="red";
+                }
+            }
+            else if (client[i].label=="goggles")
+            {   
+                if (client[i].status=="detecting")
+                { 
+                      document.getElementById('col3').style.backgroundColor="";
+                }
+                else if(client[i].status=="detected")
+                {
+                    document.getElementById('col3').style.backgroundColor="green";
+                }
+                else if(client[i].status=="not_detected")
+                {
+                    document.getElementById('col3').style.backgroundColor="red";
+                }
+            }
+            
             console.log("inside :" +i)
         }
 
@@ -407,6 +457,48 @@ function initSocket() {
         
      
     })  
+
+
+    socket.on('resultresetsocket', function (client) {
+        
+        
+        
+        if (flag == 'false')
+        {
+            if (client[1].flag == 'true' )
+            {
+                flag = client[1].flag ;
+                document.getElementById("rtcstart").click();
+        
+            }
+        
+        }   
+
+        
+        if (client[1].flag == 'false' )
+        {
+            flag = 'false'; 
+            document.getElementById("rtcstop").click();
+    
+        }
+        
+        //document.getElementById("mytable").rows[0].cells[0].innerHTML
+        //red : not_detected
+        //green : detected
+        //blank : detecting / reset
+        console.log("Reset");
+        document.getElementById('col1').style.backgroundColor="";
+        document.getElementById('col1').innerHTML="";
+        document.getElementById('col2').style.backgroundColor="";
+        document.getElementById('col2').innerHTML="";
+        document.getElementById('col3').style.backgroundColor="";
+        document.getElementById('col3').innerHTML="";
+        
+        
+        }
+    )  
+
+
 
 
 }

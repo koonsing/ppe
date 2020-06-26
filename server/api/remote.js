@@ -68,9 +68,10 @@ module.exports = function (io) {
         getClientReq: getClientReq,
         pushImage: pushImage,
         getAllClients: getAllClients,
-        postvalidate: postvalidate,
-        postresult: postresult,
-        dockercall: dockercall
+        postValidate: postValidate,
+        postResult: postResult,
+        postReset: postReset,
+        dockerCall: dockerCall
     }
 
     //===========================================
@@ -99,7 +100,7 @@ module.exports = function (io) {
     //* LOCAL FUNCTIONS
     //===========================================
 
-    function dockercall(req, res){
+    function dockerCall(req, res){
         
   
     var auxContainer;
@@ -239,7 +240,7 @@ module.exports = function (io) {
     
     }//end dockercall    
     
-    function postvalidate(req, res){
+    function postValidate(req, res){
         
             var rtsp = req.body.rtsp;
             var socketId = req.body.socketId;
@@ -290,7 +291,7 @@ module.exports = function (io) {
     }
 
     
-    function postresult(req, res){
+    function postResult(req, res){
         
         var rtsp = req.body.rtsp;
         var socketId = req.body.socketId;
@@ -342,6 +343,43 @@ module.exports = function (io) {
 }
 
 
+function postReset(req, res){
+        
+    var rtsp = req.body.rtsp;
+    var socketId = req.body.socketId;
+    
+
+    var clientParams1 = [];
+
+    product = {
+    
+        "reset": true ,
+
+    
+    }
+
+
+    clientParams1.push(product);
+
+
+    
+    product = {
+        "flag": req.body.flag,
+    
+    }
+
+    clientParams1.push(product);
+
+    console.log(clientParams1)
+
+    res.status(200);
+    res.json(clientParams1);
+    console.log("Sending data to browser . . .  , for SocketID :" + socketId );
+    io.to(socketId).emit('resultresetsocket',clientParams1);
+    
+    
+
+}
 
     function getClientSocket(clientId) {
         return clients[clientId].socketId;
