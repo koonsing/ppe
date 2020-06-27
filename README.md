@@ -69,6 +69,7 @@ http://localhost:5008/api/inspection/abc
  
 //for reset the field on webpage
  http://localhost:5008/api/inspection/reset
+
 {
  "socketId":"Sya2pjUzBJd-zhQhAAAB",
  "flag":"false"
