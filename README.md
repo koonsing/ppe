@@ -1,15 +1,15 @@
 # ppe
-git clone <br> 
-npm install <br> 
-change directory to public folder , do bower install <br> 
-node server/app.js  <br> 
+git clone 
+npm install 
+change directory to public folder , do bower install 
+node server/app.js  
 
 API end point for spinning container
 http://localhost:5008/api/inspection/def 
 
 Dockerfile for first container is Dockerfile_container1
 
-<br> 
+
 API end point for push data and trigger webrtc
 http://localhost:5008/api/inspection/abc
 
@@ -32,4 +32,49 @@ http://localhost:5008/api/inspection/abc
   flag : false  --> stop video
   flag : true  --> video play
   
+
+  //for spinning container 
+  http://localhost:5008/api/inspection/def
+
+
+ //for sending data to webpage
+ http://localhost:5008/api/inspection/result
+
+ {
+"timestamp":"2020-06-25 11:18:00.0000",
+"trackId": 2,
+"objects": [
+  {
+  "label": "helmet",
+  "status": "detecting",
+  "confidence": 20.3
+ },
+ {
+  "label": "gloves",
+  "status": "detected",
+  "confidence": 99.3
+},
+{
+"label": "goggles",
+"status": "not_detected",
+"confidence": 10.3
+}
+],
+"imageFileName": "id_01_0000.jpg",
+ "socketId":"Sya2pjUzBJd-zhQhAAAB",
+  "rtsp" : "rtsp://admin:admin@point.sg.ibm.com:8565/cam/realmonitor?channel=0&subtype=0",
+  "flag" : "true"
+
+}
+ 
+//for reset the field on webpage
+ http://localhost:5008/api/inspection/reset
+{
+ "socketId":"Sya2pjUzBJd-zhQhAAAB",
+ "flag":"false"
+
+}
+ 
+ 
+
  
