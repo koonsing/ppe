@@ -1,7 +1,10 @@
 # ppe
 git clone 
+
 npm install 
+
 change directory to public folder , do bower install 
+
 node server/app.js  
 
 API end point for spinning container
